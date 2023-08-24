@@ -1,0 +1,453 @@
+
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+ <!-- basic -->
+      <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <!-- mobile metas -->
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+      <!-- site metas -->
+      
+      <meta name="keywords" content="">
+      <meta name="description" content="">
+      <meta name="author" content="">
+      <!-- bootstrap css -->
+      <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+      <!-- style css -->
+      <link rel="stylesheet" type="text/css" href="css/style.css">
+      <!-- Responsive-->
+      <link rel="stylesheet" href="css/responsive.css">
+      <!-- fevicon -->
+      <link rel="icon" href="images/fevicon.png" type="image/gif" />
+      <!-- Scrollbar Custom CSS -->
+      <link rel="stylesheet" href="css/jquery.mCustomScrollbar.min.css">
+      <!-- Tweaks for older IEs-->
+      <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+      <!-- owl stylesheets --> 
+      <link rel="stylesheet" href="css/owl.carousel.min.css">
+      <link rel="stylesoeet" href="css/owl.theme.default.min.css">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css" media="screen">
+	  <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&amp;sensor=false"></script>
+
+
+	
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css" integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ==" crossorigin=""/>
+		<script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js" integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ==" crossorigin=""></script>
+    <link rel="stylesheet" href="leaflet-routing-machine.css" />
+    
+	
+	<title>Virágos Magyarország</title>
+	
+	<link rel="shortcut icon" type="image/x-icon" href="docs/images/favicon.ico" />
+
+        <script src="js/L.KML.js"></script>
+	 
+	<style>
+		html, body {
+			height: 100%;
+			margin: 0;
+		}
+		.leaflet-container {
+			height: 400px;
+			width: 600px;
+			max-width: 100%;
+			max-height: 100%;
+			
+		.custom .leaflet-popup-tip,
+		.custom .leaflet-popup-content-wrapper {
+		background: #e93434;
+		color: #ffffff;
+}
+		}
+		.leaflet-routing-alt {display: none}
+	</style>
+	
+    <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+ <link rel="stylesheet" href="sakura-master/dist/sakura.css" />
+	
+</head>
+<body>
+
+<script src="sakura-master/dist/sakura.js" text="sakura-master/text/javascript"></script>
+    <script>
+      var sakura = new Sakura('body', {
+        colors: [
+          {
+            gradientColorStart: 'rgba(255, 183, 197, 0.9)',
+            gradientColorEnd: 'rgba(255, 197, 208, 0.9)',
+            gradientColorDegree: 120,
+          },
+          {
+            gradientColorStart: 'rgba(255,189,189)',
+            gradientColorEnd: 'rgba(227,170,181)',
+            gradientColorDegree: 120,
+          },
+          {
+            gradientColorStart: 'rgba(212,152,163)',
+            gradientColorEnd: 'rgba(242,185,196)',
+            gradientColorDegree: 120,
+          },
+        ],
+        delay: 200,
+      });
+    </script>
+
+
+
+<!-- header section start -->
+      <div class="header_section">
+         <div class="container-fluid header_main">
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+               <a class="logo" href="index.html"><img src="images/logo.png"></a>
+               <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+               <span class="navbar-toggler-icon"></span>
+               </button>
+               <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                  <ul class="navbar-nav mr-auto">
+				  <li class="nav-item">
+                        <a class="nav-link" href="index.html">Kezdőlap</a>
+                     </li>
+                     <li class="nav-item">
+                        <a class="nav-link" href="VirágosMagyarország.html">Térkép</a>
+                     </li>
+                     <li class="nav-item">
+                        <a class="nav-link" href="Dokumentáció.html">Dokumentáció</a>
+                     </li>                    
+                  </ul>
+               </div>
+            </nav>
+         </div>
+
+
+
+
+
+
+
+ <!-- map section start -->
+<center><div id="map" style="width: 800px; height: 600px;"></div></center>
+
+
+<script>
+
+	var LeafIcon = L.Icon.extend({
+		options: {
+			iconSize:     [25, 25],
+			shadowSize:   [50, 64],
+			iconAnchor:   [2, 9],
+			shadowAnchor: [4, 62],
+			popupAnchor:  [-3, -5]
+		}
+	});
+	
+	var LeafIcon2 = L.Icon.extend({
+		options: {
+			iconSize:     [40, 40],
+			shadowSize:   [50, 64],
+			iconAnchor:   [2, 9],
+			shadowAnchor: [4, 62],
+			popupAnchor:  [-3, -5]
+		}
+	});
+
+	var goldIcon = new LeafIcon({iconUrl: 'images/gold.png'}),
+    redIcon = new LeafIcon({iconUrl: 'images/red.png'}),
+    blueIcon = new LeafIcon({iconUrl: 'images/blue.png'})
+    whiteIcon = new LeafIcon({iconUrl: 'images/white.png'})
+	plane = new LeafIcon({iconUrl: 'images/plane.png'})
+	airport = new LeafIcon2({iconUrl: 'images/airport.png'});
+	
+	
+// create popup contents
+    var customPopup = "Mozilla Toronto Offices<br/><img src='http://joshuafrazier.info/images/maptime.gif' alt='maptime logo gif' width='350px'/>";
+    
+    // specify popup options 
+    var customOptions =
+        {
+        'maxWidth': '500',
+        'className' : 'custom'
+        }
+	
+	
+
+
+	var debrecen = L.marker([47.53136580536724, 21.630749637031528],{icon:goldIcon}).bindPopup("<h1>Debrecen</h1><p>Legvirágosabb nagyváros</p><p><img src='images/db.png' width=180 /></p> ").openPopup(), 
+    makó = L.marker([46.28416213584855, 20.549391000059277],{icon:goldIcon}).bindPopup("<h1>Makó</h1><p>Legvirágosabb 30 ezer lakosnál kisebb város</p><p><img src='images/mako.jpg' width=180 /></p> ").openPopup(), 
+    zalakaros = L.marker([46.55516768577355, 17.131507044088444],{icon:goldIcon}).bindPopup("<h1>Zalakaros</h1><p>Legvirágosabb ezer főnél népesebb kisváros</p><p><img src='images/zalakaros.jpg' width=180 /></p> ").openPopup(), 
+    gyugy = L.marker([46.679492577941026, 17.694240771441322],{icon:goldIcon}).bindPopup("<h1>Gyugy</h1><p>Legvirágosabb kicsiny falu</p><p><img src='images/gyugy.jpg' width=180 /></p> ").openPopup(),
+	cegléd = L.marker([47.20520004969255, 19.804045617959662],{icon:whiteIcon}).bindPopup("<h1>Cegléd</h1><p>Miniszterelnökségi különdíjas</p><p><img src='images/cegled.jpg' width=180 /></p> ").openPopup();
+	balatongyörök = L.marker([46.780222986409086, 17.349243172587638],{icon:whiteIcon}).bindPopup("<h1>Balatongyörök</h1><p>Miniszterelnökségi különdíjas</p><p><img src='images/balatongy.jpg' width=180 /></p> ").openPopup();
+	xker= L.marker([47.486558984370866, 19.15613428708589],{icon:blueIcon}).bindPopup("<h1>Budapest X.kerület</h1><p>Legvirágosabb budapesti kerület</p><p><img src='images/bp.jpg' width=180 /></p> ").openPopup();
+	kecskemét = L.marker([46.904241587790054, 19.69003678813468],{icon:redIcon}).bindPopup("<h1>Kecskemét</h1><p>Magyar Turisztikai Ügynökség különdíjas</p><p><img src='images/kecskemet.jpg' width=180 /></p> ").openPopup();
+	telkibánya = L.marker([48.48725348739898, 21.36805500094958],{icon:redIcon}).bindPopup("<h1>Telkibánya</h1><p>Magyar Turisztikai Ügynökség különdíjas</p><p><img src='images/telkibanya.jpg' width=180 /></p> ").openPopup();
+	
+	var nyertesVarosok = L.layerGroup([debrecen,makó,zalakaros,gyugy]);	
+	var különDíj1 = L.layerGroup([cegléd,balatongyörök]);
+	var különDíj2 = L.layerGroup([xker]);
+	var különDíj3 = L.layerGroup([kecskemét,telkibánya]);
+	
+
+	var mbAttr = 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>';
+	var mbUrl = 'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw';
+	
+	var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '© OpenStreetMap'}); 
+	var streets = L.tileLayer(mbUrl, {id: 'mapbox/streets-v11', tileSize: 512, zoomOffset: -1, attribution: mbAttr});
+	var satellite = L.tileLayer(mbUrl, {id: 'mapbox/satellite-v9', tileSize: 512, zoomOffset: -1, attribution: mbAttr});
+	
+	
+	
+	var imageUrl = 'images/hunFlag.jpg'; 
+	var errorOverlayUrl = 'https://cdn-icons-png.flaticon.com/512/110/110686.png'; 
+	altText = 'OSM alaptérkép Magyarországról';
+	latLngBounds = L.latLngBounds([[45.63577267357915, 15.886703151181046], [48.677840975244975, 23.153680504518668]]);
+
+	var mo_atfedo = L.imageOverlay(imageUrl, latLngBounds, {
+		opacity:0.5,	
+		errorOverlayUrl: errorOverlayUrl, 
+		alt: altText, 
+		interactive:true
+	});
+	
+	
+	
+
+	var map = L.map('map', { center: [47.18819737170937, 19.504089173345754], zoom: 7, layers: [satellite, nyertesVarosok,különDíj1,különDíj2,különDíj3,mo_atfedo] });
+	
+
+	const parizs=L.Routing.control({
+		createMarker: function(i, wp, nWps) {		
+			return L.marker(wp.latLng,{icon:plane})
+				.bindPopup('I\'m waypoint ' + i);
+				},
+		waypoints: [
+			L.latLng(48.854315881597294, 2.336047046985664),
+			L.latLng(47.49107521637942, 21.607778943540673)
+		],		
+	}).addTo(map);
+	
+	const london=L.Routing.control({
+		createMarker: function(i, wp, nWps) {		
+			return L.marker(wp.latLng,{icon:plane})
+				.bindPopup('I\'m waypoint ' + i);
+				},
+		waypoints: [
+			L.latLng(51.511109905750715, -0.18585105086329753),
+			L.latLng(47.49107521637942, 21.607778943540673)
+		],		
+	}).addTo(map);
+	
+	const munchen=L.Routing.control({
+		createMarker: function(i, wp, nWps) {		
+			return L.marker(wp.latLng,{icon:plane})
+				.bindPopup('I\'m waypoint ' + i);
+				},
+		waypoints: [
+			L.latLng(48.158031655349404, 11.574789421418668),
+			L.latLng(47.49107521637942, 21.607778943540673)
+		],		
+	}).addTo(map);
+	
+	const eindhoven=L.Routing.control({
+		createMarker: function(i, wp, nWps) {		
+			return L.marker(wp.latLng,{icon:plane})
+				.bindPopup('I\'m waypoint ' + i);
+				},
+		waypoints: [
+			L.latLng(51.44974835547681, 5.386277827525841),
+			L.latLng(47.49107521637942, 21.607778943540673)
+		],		
+	}).addTo(map);
+	
+	const telaviv=L.Routing.control({
+		createMarker: function(i, wp, nWps) {		
+			return L.marker(wp.latLng,{icon:plane})
+				.bindPopup('I\'m waypoint ' + i);
+				},
+		waypoints: [
+			L.latLng(32.07336724581125, 34.77836152922814),
+			L.latLng(47.49107521637942, 21.607778943540673)
+		],		
+	}).addTo(map);
+	
+	const brusszel=L.Routing.control({
+		createMarker: function(i, wp, nWps) {		
+			return L.marker(wp.latLng,{icon:plane})
+				.bindPopup('I\'m waypoint ' + i);
+				},
+		waypoints: [
+			L.latLng(50.884786053597416, 4.370265994752517),
+			L.latLng(47.49107521637942, 21.607778943540673)
+		],		
+	}).addTo(map);
+	
+	const mallorca=L.Routing.control({
+		createMarker: function(i, wp, nWps) {		
+			return L.marker(wp.latLng,{icon:plane})
+				.bindPopup('I\'m waypoint ' + i);
+				},
+		waypoints: [
+			L.latLng(39.574671029527586, 2.6911222261488645),
+			L.latLng(47.49107521637942, 21.607778943540673)
+		],		
+	}).addTo(map);
+	
+	const larnaka=L.Routing.control({
+		createMarker: function(i, wp, nWps) {		
+			return L.marker(wp.latLng,{icon:plane})
+				.bindPopup('I\'m waypoint ' + i);
+				},
+		waypoints: [
+			L.latLng(34.90840745431102, 33.62795914761278),
+			L.latLng(47.49107521637942, 21.607778943540673)
+		],		
+	}).addTo(map);
+	
+	const antalya=L.Routing.control({
+		createMarker: function(i, wp, nWps) {		
+			return L.marker(wp.latLng,{icon:plane})
+				.bindPopup('I\'m waypoint ' + i);
+				},
+		waypoints: [
+			L.latLng(36.90993450680285, 30.7167252868953),
+			L.latLng(47.49107521637942, 21.607778943540673)
+		],		
+	}).addTo(map);
+	
+	const zaki=L.Routing.control({
+		createMarker: function(i, wp, nWps) {		
+			return L.marker(wp.latLng,{icon:plane})
+				.bindPopup('I\'m waypoint ' + i);
+				},
+		waypoints: [
+			L.latLng(37.780787437901665, 20.896770602504642),
+			L.latLng(47.49107521637942, 21.607778943540673)
+		],		
+	}).addTo(map);
+	
+	const korfu=L.Routing.control({
+		createMarker: function(i, wp, nWps) {		
+			return L.marker(wp.latLng,{icon:plane})
+				.bindPopup('I\'m waypoint ' + i);
+				},
+		waypoints: [
+			L.latLng(39.622056766720306, 19.911987893095645),
+			L.latLng(47.49107521637942, 21.607778943540673)
+		],		
+	}).addTo(map);
+	
+	const burgasz=L.Routing.control({
+		createMarker: function(i, wp, nWps) {		
+			return L.marker(wp.latLng,{icon:plane})
+				.bindPopup('I\'m waypoint ' + i);
+				},
+		waypoints: [
+			L.latLng(42.51410146859469, 27.452651009795105),
+			L.latLng(47.49107521637942, 21.607778943540673)
+		],		
+	}).addTo(map);
+	
+	
+	
+	parizsm = L.marker([48.854315881597294, 2.336047046985664],{icon:airport}).bindPopup("<h1>Párizs</h1> ").openPopup();
+	londonm = L.marker([51.511109905750715, -0.18585105086329753],{icon:airport}).bindPopup("<h1>London</h1> ").openPopup();
+	munchenm = L.marker([48.158031655349404, 11.574789421418668],{icon:airport}).bindPopup("<h1>München</h1> ").openPopup();
+	telavivm = L.marker([32.07336724581125, 34.77836152922814],{icon:airport}).bindPopup("<h1>Tel-Aviv</h1> ").openPopup();
+	eindhovenm= L.marker([51.44974835547681, 5.386277827525841],{icon:airport}).bindPopup("<h1>Eindhoven</h1> ").openPopup();
+	brusszelm = L.marker([50.884786053597416, 4.370265994752517],{icon:airport}).bindPopup("<h1>Brüsszel</h1> ").openPopup();
+	mallorcam = L.marker([39.574671029527586, 2.6911222261488645],{icon:airport}).bindPopup("<h1>Palma de Mallorca</h1> ").openPopup();
+	larnakam = L.marker([34.90840745431102, 33.62795914761278],{icon:airport}).bindPopup("<h1>Lárnaka</h1> ").openPopup();
+	antalyam = L.marker([36.90993450680285, 30.7167252868953],{icon:airport}).bindPopup("<h1>Antalya</h1> ").openPopup();
+	zakim = L.marker([37.780787437901665, 20.896770602504642],{icon:airport}).bindPopup("<h1>Zakynthos</h1> ").openPopup();
+	korfum= L.marker([39.622056766720306, 19.911987893095645],{icon:airport}).bindPopup("<h1>Korfu</h1> ").openPopup();
+	burgaszm= L.marker([42.51410146859469, 27.452651009795105],{icon:airport}).bindPopup("<h1>Burgasz</h1> ").openPopup();
+	
+	
+	
+	
+	utak=L.layerGroup([parizsm,londonm,munchenm,telavivm,eindhovenm,brusszelm,mallorcam,larnakam,antalyam,zakim,korfum,burgaszm]);
+
+	
+	
+	var baseMaps = { "OpenStreetMap": osm, "Mapbox Streets": streets,"Satellite":satellite}; 
+	var overlayMaps = {"Nyertes városok": nyertesVarosok,"Miniszterelnökségi külondíj":különDíj1,"Legvirágosabb budapesti kerület":különDíj2,"Magyar Turisztikai Ügynökség különdíja":különDíj3,
+	"Átfedő réteg":mo_atfedo,"Debrecenbe látogatni":utak};
+	
+
+	var layerControl = L.control.layers(baseMaps, overlayMaps).addTo(map);
+	
+
+	
+
+
+	fetch('https://raw.githubusercontent.com/Kiny21/terinfo/main/Hat%C3%A1r.kml?fbclid=IwAR1cNcvuoceHGSl0tD3UwIDOmacJ1HcUjbXhyljtA3jievDtgkdX7oxwCPI')
+				  .then( res => res.text() )
+				  .then( kmltext => {
+
+						// Create new kml overlay
+						parser = new DOMParser();
+						kml = parser.parseFromString(kmltext,"text/xml");
+
+						console.log(kml)
+
+						const track = new L.KML(kml)
+						map.addLayer(track)
+
+						// Adjust map to show the kml
+						const bounds = track.getBounds()
+						map.fitBounds( bounds )
+				  })
+				  
+				  
+	
+</script>
+
+    
+
+        
+
+
+
+ <!-- footer section start -->
+      <div class="footer_section layout_padding">
+         <div class="container">
+            <div class="footer_logo"><a href="index.html"><img src="images/footer-logo.png"></a></div>
+            <div class="footer_menu">
+               <ul>
+                  <li><a href="index.html">Kezdőlap</a></li>
+                  <li><a href="VirágosMagyarország.html">Térkép</a></li>
+                  <li><a href="Dokumentáció.html">Dokumentáció</a></li>                  
+               </ul>
+            </div>
+            <div class="contact_menu">
+               <ul>              
+                  <li><a href="#">Készítette: Pósán Kinga</a></li>
+                 
+               </ul>
+            </div>
+         </div>
+      </div>
+      <!-- footer section end -->
+      <!-- copyright section start -->
+      <div class="copyright_section">
+         <div class="container">
+            <p class="copyright_text">Copyright 2020 All Right Reserved By.<a href="https://html.design"> Free  html Templates</a></p>
+         </div>
+      </div>
+      <!-- copyright section end -->
+      <!-- Javascript files-->
+      <script src="js/jquery.min.js"></script>
+      <script src="js/popper.min.js"></script>
+      <script src="js/bootstrap.bundle.min.js"></script>
+      <script src="js/jquery-3.0.0.min.js"></script>
+      <script src="js/plugin.js"></script>
+      <!-- sidebar -->
+      <script src="js/jquery.mCustomScrollbar.concat.min.js"></script>
+      <script src="js/custom.js"></script>
+      <!-- javascript --> 
+      <script src="js/owl.carousel.js"></script>
+      <script src="https:cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.js"></script>
+</body>
+</html>
